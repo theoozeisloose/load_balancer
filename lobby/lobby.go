@@ -8,8 +8,10 @@ type Lobby struct {
 	MaxPlayers int `json:"maxPlayers"`
 	// NumPlayers tells the number of players currently connected to the lobby.
 	NumPlayers int `json:"numPlayers"`
-	// Server tells the server address hosting the lobby.
-	Server string `json:"server"`
+	// Host tells the address of the server hosting the lobby.
+	Host string `json:"host"`
+	// Port tells the port on which the server is hosting the lobby.
+	Port int `json:"port"`
 }
 
 // NewLobby creates a new lobby with the given parameters.

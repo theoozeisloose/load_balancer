@@ -20,7 +20,8 @@ func GetLobby(w http.ResponseWriter, r *http.Request) {
 func main() {
 	lobby1 := lobby.NewLobby("KSSV Lobby", 4)
 	lobby1.NumPlayers = 0
-	lobby1.Server = "pylon1.usc.edu:7777"
+	lobby1.Host = "pylon1.usc.edu"
+	lobby1.Port = 8888
 	lobbies = append(lobbies, lobby1)
 
 	router := mux.NewRouter()
