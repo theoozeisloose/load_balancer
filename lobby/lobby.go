@@ -13,8 +13,3 @@ type Lobby struct {
 	// Port tells the port on which the server is hosting the lobby.
 	Port int `json:"port"`
 }
-
-// NewLobby creates a new lobby with the given parameters.
-func NewLobby(name string, maxPlayers int) Lobby {
-	return Lobby{Name: name, MaxPlayers: maxPlayers}
-}

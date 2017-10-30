@@ -18,10 +18,13 @@ func GetLobby(w http.ResponseWriter, r *http.Request) {
 
 // main function bootstraps the load balancer.
 func main() {
-	lobby1 := lobby.NewLobby("KSSV Lobby", 4)
-	lobby1.NumPlayers = 0
-	lobby1.Host = "pylon1.usc.edu"
-	lobby1.Port = 8888
+	lobby1 := lobby.Lobby{
+		Name:       "KSSV Lobby",
+		MaxPlayers: 4,
+		NumPlayers: 0,
+		Host:       "pylon1.usc.edu",
+		Port:       8888,
+	}
 	lobbies = append(lobbies, lobby1)
 
 	router := mux.NewRouter()
