@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+	"strconv"
 	"sync"
 )
 
@@ -70,7 +71,8 @@ func identifyNextPort() int {
 // spawnNewGameServer spawns a new game instance on the given port.
 func spawnNewGameServer(port int) (int, error) {
 	log.Printf("Trying to spawn game on port %d", port)
-	cmd := exec.Command("/home/gpstudent/game/Linux.x86_64", "-batchmode", "-nographics", "-server", "-port="+string(port), "-logfile", "log_"+string(port)+".out")
+	portStr := strconv.Itoa(port)
+	cmd := exec.Command("/home/gpstudent/game/Linux.x86_64", "-batchmode", "-nographics", "-server", "-port="+portStr, "-logfile", "log_"+portStr+".out")
 	err := cmd.Start()
 	if err != nil {
 		log.Fatal(err)
