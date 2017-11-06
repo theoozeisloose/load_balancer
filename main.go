@@ -43,7 +43,7 @@ var (
 
 // createKey creates a new key given the host and the port.
 func createKey(host string, port int) string {
-	return host + "_" + string(port)
+	return host + "_" + strconv.Itoa(port)
 }
 
 // GetLobby writes the list of lobbies.
@@ -129,6 +129,9 @@ func UpdateLobby(w http.ResponseWriter, r *http.Request) {
 		log.Println("Failed to update lobby", err)
 		return
 	}
+
+	log.Printf("Received update lobby request for port = %d, numPlayers = %d", lobby.Port, lobby.NumPlayers)
+
 	originalLobby := lobbies[createKey(lobby.Host, lobby.Port)]
 	originalLobby.NumPlayers = lobby.NumPlayers
 	originalStatus := statuses[createKey(lobby.Host, lobby.Port)]
