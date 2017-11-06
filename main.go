@@ -184,6 +184,17 @@ func reaper() {
 	}
 }
 
+// ReapLobby marks a lobby for reaping.
+func ReapLobby(w http.ResponseWriter, r *http.Request) {
+	lock.Lock()
+	defer lock.Unlock()
+
+	params := mux.Vars(r)
+	port, _ := strconv.Atoi(params["port"])
+	lobbies[createKey(defaultHost, port)].NumPlayers = 0
+	statuses[createKey(defaultHost, port)].PlayersJoined = true
+}
+
 // main function bootstraps the load balancer.
 func main() {
 	initLobbies()
@@ -193,5 +204,6 @@ func main() {
 	router.HandleFunc("/lobby", GetLobbies).Methods("GET")
 	router.HandleFunc("/lobby", CreateLobby).Methods("POST")
 	router.HandleFunc("/lobby", UpdateLobby).Methods("PUT")
+	router.HandleFunc("/reap/{port}", ReapLobby).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8000", router))
 }
