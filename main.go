@@ -9,6 +9,8 @@ import (
 	"os/exec"
 	"strconv"
 	"sync"
+	"syscall"
+	"time"
 )
 
 // status represents game process status.
@@ -155,9 +157,34 @@ func initLobbies() {
 	statuses[createKey(lobby1.Host, lobby1.Port)] = status1
 }
 
+// reaper tries to reap idle process every 10 seconds.
+func reaper() {
+	for {
+		log.Println("Trying to reap game instances...")
+		lock.Lock()
+		for key, lobby := range lobbies {
+			status := statuses[key]
+			if lobby.Host == defaultHost && lobby.NumPlayers == 0 && status.PlayersJoined {
+				log.Printf("Trying to reap process with id %d", status.Pid)
+				err := syscall.Kill(status.Pid, syscall.SIGKILL)
+				if err != nil {
+					log.Printf("Failed to reap process with id %d", status.Pid)
+					continue
+				}
+				delete(lobbies, key)
+				delete(statuses, key)
+				log.Printf("Succesfully reaped process with id %d", status.Pid)
+			}
+		}
+		lock.Unlock()
+		time.Sleep(10 * time.Second)
+	}
+}
+
 // main function bootstraps the load balancer.
 func main() {
 	initLobbies()
+	go reaper()
 
 	router := mux.NewRouter()
 	router.HandleFunc("/lobby", GetLobbies).Methods("GET")
