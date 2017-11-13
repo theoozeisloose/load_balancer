@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os/exec"
+	"sort"
 	"strconv"
 	"sync"
 	"syscall"
@@ -51,8 +52,15 @@ func GetLobbies(w http.ResponseWriter, r *http.Request) {
 	lock.RLock()
 	defer lock.RUnlock()
 
+	names := make([]string, 0, len(lobbies))
+	for name := range lobbies {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+
 	lobbyList := make([]lobby.Lobby, 0, len(lobbies))
-	for _, lobby := range lobbies {
+	for _, name := range names {
+		lobby := lobbies[name]
 		lobbyList = append(lobbyList, *lobby)
 	}
 	json.NewEncoder(w).Encode(lobbyList)
