@@ -113,7 +113,7 @@ func CreateLobby(w http.ResponseWriter, r *http.Request) {
 
 	newLobby := &lobby.Lobby{
 		Name:       l.Name,
-		MaxPlayers: 4,
+		MaxPlayers: 8,
 		NumPlayers: 0,
 		Host:       defaultHost,
 		Port:       port,
@@ -155,7 +155,7 @@ func initLobbies() {
 
 	lobby1 := &lobby.Lobby{
 		Name:       "localhost lobby",
-		MaxPlayers: 4,
+		MaxPlayers: 8,
 		NumPlayers: 0,
 		Host:       "localhost",
 		Port:       8888,
